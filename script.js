@@ -1,11 +1,11 @@
 
 console.log('Задача1');
 
-let arr = [];
-for(let i = 1; i <= 5; i++){
-    arr.push(i);
+function result(num1, num2, num3) {
+    return (num1 - num2) / num3;
 }
-console.log(arr);
+let total = result (4, 5, 6);
+console.log(total);
 
 console.log('');
 
@@ -13,12 +13,13 @@ console.log('');
 
 console.log('Задача2');
 
-let arr1 = [-2, -1, -3, 15, 0, -4, 2, -5, 9, -15, 0, 4, 5, -6, 10, 7];
-for(let i = 0; i < arr1.length; i++){
-    if(arr1[i] < -3 && arr1[i] > -10 && arr1[i] < 0){
-        console.log(arr1[i]);
-    }
+function result1(number) {
+    let cube = number ** 3;
+    let square = number ** 2;
+    return [cube , square];
 }
+let total1 = result1 (6);
+console.log(total1);
 
 console.log('');
 
@@ -26,25 +27,24 @@ console.log('');
 
 console.log('Задача3');
 
-let arrFor = [];
-for(let i = 23; i <= 57; i++){
-    arrFor.push(i);
+function min(a, b) {
+    if(a < b) {
+      return a;
+    }else {
+      return b;
+    }
+} 
+function max(a, b) {
+    if(a > b) {
+      return a;
+    }else {
+      return b;
+    }
 }
-console.log(arrFor);
-
-let result = 0;
-for (let b = 0; b < arrFor.length; b++){
-    result += arrFor[b];
-}
-console.log(result);
-
-let arrWhile = [];
-let a = 23;
-while (a <= 57){
-    arrWhile.push(a);
-    a++;    
-}
-console.log(arrWhile);
+let result2 = min(8, 6);
+console.log(result2);
+let result3 = max(0, 2);
+console.log(result3);
 
 console.log('');
 
@@ -52,48 +52,58 @@ console.log('');
 
 console.log('Задача4');
 
-let c = ['10', '20', '30', '50', '235', '3000'];
-for (let d = 0; d < c.length; d++) {
-  let number = c[d][0];
-  if (number === '1' || number === '2' || number === '5') {
-    console.log(c[d]);
-  }
+let start = +prompt('Введите первое значение в диапазоне: ');
+let end = +prompt('Введите последнее значение в диапазоне: ');
+let array = [];
+function range() {
+    for (let i = start; i <= end; i++) {
+        array.push(i);
+    }
+    return array;
 }
+function conclusion(array) {
+    console.log(array);
+}
+let numb = range();
+conclusion(numb);
 
 console.log('');
 
 
 
-//document.write('Задача5');
+console.log('Задача5');
 
-let week = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС'];
-for(let days = 0; days < week.length; days++){
-    if(week[days] === 'СБ' || week[days] === 'ВС'){
-        document.write('<b>' + week[days] + '</b>' + '<br />'); 
-    }else{
-        document.write(week[days] + '<br />');
+let even = +prompt('Введите любое целое число: ');
+let isEven = function (even) {
+    if (even % 2 === 0) {
+        console.log('true');
+      } else {
+        console.log('false');
     }
 }
+isEven(even);
 
-document.write(''); 
+console.log('');
 
 
 
 console.log('Задача6');
 
-let tools = ['Перфоратор', 'Болгарка', 'Шуруповерт', 'Фен', 'Дрель', 'Лобзик', 'Циркулярная пила'];
-console.log(tools.length);
-for(let construct = 0; construct < tools.length; construct++){
-    console.log(tools[construct]);
+function isEven1(number) {
+    return number % 2 === 0;
 }
-console.log(tools[6]);
-
-console.log('');
-
-let tools1 = ['Перфоратор', 'Болгарка', 'Шуруповерт', 'Фен', 'Дрель', 'Лобзик'];
-tools1.push('Циркулярная пила');
-let saw1 = tools1[tools1.length - 1];
-console.log(saw1);
+function together(numbers) {
+    let numArray = [];
+    for (let i = 0; i < numbers.length; i++) {
+        if (isEven1(numbers[i])) {
+            numArray.push(numbers[i]);
+        }
+    }
+    return numArray;
+}
+let numbers = range();
+let numArray = together(numbers);
+console.log(numArray);;
 
 console.log('');
 
@@ -101,7 +111,19 @@ console.log('');
 
 console.log('Задача7');
 
-
+let exit = '';
+function pyramid(rows, symbol = '1') {
+   for(let i = 1; i <= rows; i++){
+    for(let j = 1; j <= i; j++){
+        exit += symbol //i;
+    }
+    exit += '\n';
+   } 
+   console.log(exit);
+}
+//pyramid(9);
+pyramid(10, '*');
+//pyramid(10, 'T');
 
 console.log('');
 
@@ -109,50 +131,55 @@ console.log('');
 
 console.log('Задача8');
 
-let back = [12, false, 'Текст', 4, 2, -5, 0];
-let k = 0;
-while (k < back.length) {
-    console.log(back[k]);
-    k++;
+let h = prompt('Высота пирамидки: ');
+function triangle(h) {
+    for(let i = 1; i <= h; i++) {
+        let str = " ";
+        let p = " ";
+        for(let j = 0; j < h - i; j++) {
+            str += " ";
+        }
+        for(let k = 0; k < i * 2 - 1; k++) {
+            p += "*";
+        }
+        console.log(`${str + p}`);
+    }
 }
-back.reverse();
-console.log(back);
+h = parseInt(h);
+triangle(h);
 
 console.log('');
+
+function twoTriangle(h) {
+    for(let i = h; i >= 1; i--) {
+        let str = " ";
+        let p = " ";
+        for(let j = h - i; j > 0; j--) {
+            str += " ";
+        }
+        for(let k = i * 2 - 1; k > 0; k--) {
+            p += "*";
+        }
+        console.log(`${str + p}`);
+    }
+}
+twoTriangle(h);
+
+console.log('');
+
 
 
 console.log('Задача9');
 
-let whole = [5, 9, 21, , , 9, 78, , , , 6];
-let wholeZero = 0;
-for(let zero = 0; zero < whole.length; zero++){
-    if(whole[zero] === undefined){
-        wholeZero++;
+function fibonacci() {
+    let fibArray = [0, 1];
+    let i = 2;
+    while (fibArray[i - 1] + fibArray[i - 2] <= 1000) {
+      fibArray[i] = fibArray[i - 1] + fibArray[i - 2];
+      i++;
     }
+    return fibArray;
 }
-console.log('Количество нулевых элементов: ' + wholeZero);
+console.log(fibonacci());
 
 console.log('');
-
-
-
-console.log('Задача10');
-
-
-
-console.log('');
-
-
-
-console.log('Задача11');
-
-
-
-console.log('');
-
-
-
-
-
-
-
