@@ -107,7 +107,10 @@ console.log('');
 
 console.log('Задача9');
 
-
+const email = function (mail) {
+    let regExp = /^[^\d]{1}[a-zA-Z_\.\d]{1,}@{1}[a-zA-z\d_]{2,11}\.[a-z]{2,11}/g;
+    return regExp.test(mail);
+}
 
 console.log('');
 
@@ -115,13 +118,42 @@ console.log('');
 
 console.log("Задача10");
 
+const addres = function (url) {
+    let regExp = /(https?:\/\/\d?[a-z][a-z0-9]+(?:\.?[0-9a-z]+)*\.[a-z]{2,11})(\/(?:[^#\?\s]+)+\/?)?(\?[^#]+)?(#\w+)?/g;
+    let groups = regExp.exec(url);
+    // console.log([...groups]);
 
+    return [...groups].filter((elem, index) => index !== 0 ? elem : null);
+}
 
 console.log('');
 
 
 
+function randInt(min, max) {
+    return Math.floor(Math.random() * (max - min) + min);    
+}
+
+randInt(5, 10);
 
 
 
+let s = '  \t  \n didhdjhohidth    \n  ';
+console.log(s);
+console.log(s.trim());
+console.log(s.trimEnd());
+console.log(s.trimStart());
+console.log(s.replace(/^\s+/g,'').replace(/\s+$/g, ''));
 
+
+
+et arr = [4, 2, 5, 19, 13, 0, 10];
+
+let num = Math.sqrt(arr.reduce(function (acc, elem) {
+    return acc += elem ** 3;
+}, 0));
+
+
+let num = Math.sqrt(arr.reduce((acc, elem) => acc += elem ** 3, 0));
+
+console.log(num);
