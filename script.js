@@ -147,11 +147,11 @@ console.log(s.replace(/^\s+/g,'').replace(/\s+$/g, ''));
 
 
 
-et arr = [4, 2, 5, 19, 13, 0, 10];
-
-let num = Math.sqrt(arr.reduce(function (acc, elem) {
-    return acc += elem ** 3;
-}, 0));
+//let arr = [4, 2, 5, 19, 13, 0, 10];
+//
+//let num = Math.sqrt(arr.reduce(function (acc, elem) {
+//    return acc += elem ** 3;
+//}, 0));
 
 
 let num = Math.sqrt(arr.reduce((acc, elem) => acc += elem ** 3, 0));
