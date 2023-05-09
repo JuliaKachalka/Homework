@@ -1,159 +1,86 @@
-console.log('Задача1');
-
-let str = 'aaa@bbb@ccc';
-console.log(str.replace(/@/g, '!'));
-
-console.log('');
-
-
-
-console.log('Задача2');
-
-let date = '2025-12-31';
-console.log(date.replace(/(2025)(-)(12)(-)(31)/, '$5/$3/$1',));
-
-console.log('');
-
-
-
-console.log('Задача3');
-
-let str1 = 'Я учу javascript!';
-console.log(str1);
-console.log(str1.substr(2, 4));
-console.log(str1.substr(6, 10));
-console.log(str1.substring(2, 5));
-console.log(str1.substring(6, 16));
-console.log(str1.substring(6, 17));
-console.log(str1.slice(2, 5));
-console.log(str1.slice(6, 16));
-
-console.log('');
-
-
-
-console.log('Задача4');
-
-let arr = [4, 2, 5, 19, 13, 0, 10];
-let summ = 0;
-for(let i = 0; i < arr.length; i++) {
-    summ += Math.pow(arr[i], 3);
-}
-let square = Math.sqrt(summ);
-console.log(square);
-
-console.log('');
-
-
-
-console.log('Задача5');
-
-let a = 3;
-let b = 5;
-let c = Math.abs(a-b);
-console.log(c);
-
-a = 6;
-b = 1;
-c = Math.abs(a-b);
-console.log(c);
-
-console.log('');
-
-
-
-console.log('Задача6');
-
-let now = new Date();
-
-function current(number) {
-    return number < 10 ? '0' + number : number;
-}
-let hours = current(now.getHours());
-let minutes = current(now.getMinutes());
-let seconds = current(now.getSeconds());
-let day = current(now.getDate());
-let month = current(now.getMonth() + 1);
-let year = current(now.getFullYear());
-
-let dateNow = hours + ':' + minutes + ':' + seconds + ' ' + day + '.' + month + '.' + year;
-console.log(dateNow);
-
-console.log('');
-
-
-
-console.log('Задача7');
-
-let line = 'aa aba abba abbba abca abea';
-console.log(line.match(/ab+a/gi));
-
-console.log('');
-
-
-
-console.log('Задача8');
-
-function tel(telPhone) {
-    let phone = /^\+\d{1,3}\s\(\d{1,5}\)\s\d{5,7}$/;
-    return phone.test(telPhone);
-}
-console.log(tel('+1 (12345) 1234567'));
-console.log(tel('456 8524 6254'));
-
-console.log('');
-
-
-
-console.log('Задача9');
-
-const email = function (mail) {
-    let regExp = /^[^\d]{1}[a-zA-Z_\.\d]{1,}@{1}[a-zA-z\d_]{2,11}\.[a-z]{2,11}/g;
-    return regExp.test(mail);
+let Auto = function (brand, model, number) {
+    this.brand = brand;
+    this.model = model;
+    this.number = number;
+    this.engineOnOff = function () {
+        this.engineOnOff = prompt('Ваша машина заведена?');
+        if(this.engineOnOff){
+            this.engineOnOff = 'да';
+            console.log('Двигатель включен!');
+        }else{
+            console.log('Двигатель выключен!');
+        }
+    };
+    this.transmission = function () {
+        transmission = prompt('Включена передача: вперед, назад, нейтральная?');
+        if(this.engineOnOff && (transmission === 'вперед' || transmission === 'назад' || transmission === 'нейтральная')){
+            this.transmission = transmission;
+            console.log(`Включена передача: ${this.transmission}.`);
+        }else{
+            console.log('Двигатель выключен!');
+        }
+    };
+    this.sped = function () {
+        sped = +prompt('Введите скорость автомобиля!');
+        if(this.engineOnOff && this.transmission === 'вперед'){
+            this.sped = sped;
+            console.log(`Автомобиль движется вперед со скоростью ${this.sped} км/ч.`);
+        }else if(this.engineOnOff && this.transmission === 'назад'){
+            this.sped = sped;
+            console.log(`Автомобиль движется назад со скоростью ${this.sped} км/ч.`);
+        }else{
+            console.log(`Машина выключена или включена нейтральная передача!`);
+        }
+    };
+    this.distance = function () {
+        if(this.engineOnOff && this.transmission === 'вперед'){
+            this.distance = sped;
+            console.log(`Автомобиль прошел дистанцию ${this.distance} км.`);
+        }else if(this.engineOnOff && this.transmission === 'назад'){
+            this.distance = sped;
+            console.log(`Автомобиль прошел дистанцию ${this.distance} км.`);
+        }else{
+            console.log(`Машина выключена или включена нейтральная передача!`);
+        }
+    };
+    this.braking = function () {
+        this.g = 9.81; //ускорение силы тяжести
+        this.ks = +prompt('Введите коэффициент сцепления автомобиля с дорогой: 0.7(сухой асфальт), 0.4(мокрый асфальт), 0.2(укатанный снег), 0.1(обледенение)!')
+        this.braking = this.result;
+        switch (this.ks) {
+            case 0.7:
+                this.result = (this.sped * 2) / (2 * this.g * this.ks);
+                console.log(`Тормозной путь автомобиля ${this.result} м/сек.`);
+            break;
+            case 0.4:
+                this.result = (this.sped * 2) / (2 * this.g * this.ks);
+                console.log(`Тормозной путь автомобиля ${this.result} м/сек.`);
+            break;
+            case 0.2:
+                this.result = (this.sped * 2) / (2 * this.g * this.ks);
+                console.log(`Тормозной путь автомобиля ${this.result} м/сек.`);
+            break;
+            case 0.1:
+                this.result = (this.sped * 2) / (2 * this.g * this.ks);
+                console.log(`Тормозной путь автомобиля ${this.result} м/сек.`);
+            break;      
+            default:
+                this.result = 0;
+                console.log('Авария!');
+            break;
+        } 
+    };
 }
 
-console.log('');
+console.log(Auto);
 
-
-
-console.log("Задача10");
-
-const addres = function (url) {
-    let regExp = /(https?:\/\/\d?[a-z][a-z0-9]+(?:\.?[0-9a-z]+)*\.[a-z]{2,11})(\/(?:[^#\?\s]+)+\/?)?(\?[^#]+)?(#\w+)?/g;
-    let groups = regExp.exec(url);
-    // console.log([...groups]);
-
-    return [...groups].filter((elem, index) => index !== 0 ? elem : null);
-}
-
-console.log('');
-
-
-
-function randInt(min, max) {
-    return Math.floor(Math.random() * (max - min) + min);    
-}
-
-randInt(5, 10);
-
-
-
-let s = '  \t  \n didhdjhohidth    \n  ';
-console.log(s);
-console.log(s.trim());
-console.log(s.trimEnd());
-console.log(s.trimStart());
-console.log(s.replace(/^\s+/g,'').replace(/\s+$/g, ''));
-
-
-
-et arr = [4, 2, 5, 19, 13, 0, 10];
-
-let num = Math.sqrt(arr.reduce(function (acc, elem) {
-    return acc += elem ** 3;
-}, 0));
-
-
-let num = Math.sqrt(arr.reduce((acc, elem) => acc += elem ** 3, 0));
-
-console.log(num);
+let audi = new Auto ('AUDI', 'А4', 'А256ИП');
+console.log(audi);
+console.log(`Марка автомобиля ${audi.brand}.`);
+console.log(`Модель автомобиля ${audi.model}.`);
+console.log(`Номер автомобиля ${audi.number}.`);
+audi.engineOnOff();
+audi.transmission();
+audi.sped();
+audi.distance();
+audi.braking();
