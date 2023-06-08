@@ -1,0 +1,25 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+p {
+    font-size: 20px;
+    margin: 50px;
+}
+
+.tooltip {
+    position: relative;
+    background: #10e1f4;
+    cursor: pointer;
+} 
+
+.tooltip_content {
+    position: absolute;
+    background: #f30909;
+    border-radius: 10px;
+    box-shadow: 0 0 3px 1px #07f4c9;
+    width: 100px;
+    left: -40px;
+    padding: 10px;
+}
