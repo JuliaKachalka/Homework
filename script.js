@@ -1,173 +1,142 @@
-let Auto = function (brand, model, number) {
-    this.brand = brand;
-    this.model = model;
-    this.number = number;
-    this.engineOn = false;
-    
-    Auto.prototype.engineOnOff = function() {
-        this.engineOnOff = prompt('Ваша машина заведена?');
-        this.engineOn = !this.engineOn;
-        if(this.engineOn){
-            this.engineOn === 'да';
-            console.log('Двигатель включен!');
-        }else{
-            console.log('Двигатель выключен!');
-        }
+class User {
+    constructor(data) {
+        this.data = data;
+    }
 
-    };
+    edit(obj) {
+        this.data = { ...this.data, ...obj };
+    }
 
-    this.transmission = function () {
-        transmission = prompt('Включена передача: вперед, назад, нейтральная?');
-        if(this.engineOn && (transmission === 'вперед' || transmission === 'назад' || transmission === 'нейтральная')){
-            this.transmission = transmission;
-            console.log(`Включена передача: ${this.transmission}.`);
-        }else{
-            console.log('Двигатель выключен!');
-        }
-    };
-    this.sped = function () {
-        speed = +prompt('Введите скорость автомобиля!');
-        if(this.engineOn && this.transmission === 'вперед'){
-            this.speed = speed;
-            console.log(`Автомобиль движется вперед со скоростью ${this.speed} км/ч.`);
-        }else if(this.engineOn && this.transmission === 'назад'){
-            this.speed = speed;
-            console.log(`Автомобиль движется назад со скоростью ${this.speed} км/ч.`);
-        }else{
-            console.log(`Машина выключена или включена нейтральная передача!`);
-        }
-    };
+    get() {
+        return this.data;
+    }
+}
+  
+class Contacts {
+    constructor() {
+        this.data = [];
+    }
 
-    this.distance = function () {
-        if(this.engineOn && this.transmission === 'вперед'){
-            this.distance = speed;
-            console.log(`Автомобиль прошел дистанцию ${this.distance} км.`);
-        }else if(this.engineOn && this.transmission === 'назад'){
-            this.distance = speed;
-            console.log(`Автомобиль прошел дистанцию ${this.distance} км.`);
-        }else{
-            console.log(`Машина выключена или включена нейтральная передача!`);
-        }
-    };
+    add(data) {
+        const user = new User(data);
+        this.data.push(user);
+    }
 
-    Auto.prototype.braking = function () {
-    this.g = 9.81; //ускорение силы тяжести
-    this.ks = +prompt('Введите коэффициент сцепления автомобиля с дорогой: 0.7(сухой асфальт), 0.4(мокрый асфальт), 0.2(укатанный снег), 0.1(обледенение)!')
-        this.braking = this.result;
-        switch (this.ks) {
-            case 0.7:
-                this.result = (this.speed * 2) / (2 * this.g * this.ks);
-                console.log(`Тормозной путь автомобиля ${this.result} м/сек.`);
-            break;
-            case 0.4:
-                this.result = (this.speed * 2) / (2 * this.g * this.ks);
-                console.log(`Тормозной путь автомобиля ${this.result} м/сек.`);
-            break;
-            case 0.2:
-                this.result = (this.speed * 2) / (2 * this.g * this.ks);
-                console.log(`Тормозной путь автомобиля ${this.result} м/сек.`);
-            break;
-            case 0.1:
-                this.result = (this.speed * 2) / (2 * this.g * this.ks);
-                console.log(`Тормозной путь автомобиля ${this.result} м/сек.`);
-            break;      
-            default:
-                this.result = 0;
-                console.log('Авария!');
-            break;
-        } 
-    };
+    edit(id, obj) {
+        const user = this.data.find((user) => user.data.id === +id);
+        if (user) {
+            user.edit(obj);
+        }
+    }
+
+    remove(id) {
+        this.data = this.data.filter((user) => user.data.id !== +id);
+    }
+
+    get() {
+        return this.data.map((user) => user.get());
+    }
+}
+  
+class ContactsApp extends Contacts {
+    constructor(containerSelector) {
+        super();
+        this.app = document.querySelector(containerSelector);
+        this.render();
+    }
+
+    render() {
+        const form = document.createElement("form");
+        const nameInput = document.createElement("input");
+        nameInput.setAttribute("placeholder", "Name");
+        const emailInput = document.createElement("input");
+        emailInput.setAttribute("placeholder", "Email");
+        const addressInput = document.createElement("input");
+        addressInput.setAttribute("placeholder", "Address");
+        const phoneInput = document.createElement("input");
+        phoneInput.setAttribute("placeholder", "Phone");
+        const addButton = document.createElement("button");
+        addButton.textContent = "Add";
+        addButton.addEventListener("click", this.onAdd.bind(this));
+        form.append(nameInput, emailInput, addressInput, phoneInput, addButton);
+        this.app.append(form);
+    }
+
+    onAdd(event) {
+        event.preventDefault();
+        const form = event.target.form;
+        const name = form.elements[0].value;
+        const email = form.elements[1].value;
+        const address = form.elements[2].value;
+        const phone = form.elements[3].value;
+        const id = Date.now();
+        const data = { id, name, email, address, phone };
+        this.add(data);
+        this.get();
+        form.reset();
+    }
+
+    onEdit(event) {
+        const id = event.target.dataset.id;
+        const user = this.data.find((user) => user.data.id === +id);
+        if (user) {
+            const form = this.app.querySelector("form");
+            const nameInput = form.elements[0];
+            const emailInput = form.elements[1];
+            const addressInput = form.elements[2];
+            const phoneInput = form.elements[3];
+            nameInput.value = user.data.name;
+            emailInput.value = user.data.email;
+            addressInput.value = user.data.address;
+            phoneInput.value = user.data.phone;
+            const saveButton = document.createElement("button");
+            saveButton.textContent = "Save";
+            saveButton.dataset.id = id;
+            saveButton.addEventListener("click", this.onSave.bind(this));
+            form.append(saveButton);
+        }
+    }
+
+    onSave(event) {
+        event.preventDefault();
+        const id = event.target.dataset.id;
+        const form = event.target.form;
+        const name = form.elements[0].value;
+        const email = form.elements[1].value;
+        const address = form.elements[2].value;
+        const phone = form.elements[3].value;
+        const data = { name, email, address, phone };
+        this.edit(id, data);
+        this.get();
+        form.reset();
+    }
+
+    onRemove(event) {
+        const id = event.target.dataset.id;
+        this.remove(id);
+        this.get();
+    }
+    get() {
+        const list = document.createElement("ul");
+        this.app.querySelector("ul")?.remove();
+        this.data.forEach((user) => {
+            const item = document.createElement("li");
+            const name = document.createElement("span");
+            name.textContent = user.get().name;
+            const editButton = document.createElement("button");
+            editButton.textContent = "Edit";
+            editButton.dataset.id = user.get().id;
+            editButton.addEventListener("click", this.onEdit.bind(this));
+            const removeButton = document.createElement("button");
+            removeButton.textContent = "Remove";
+            removeButton.dataset.id = user.get().id;
+            removeButton.addEventListener("click", this.onRemove.bind(this));
+            item.append(name, editButton, removeButton);
+            list.append(item);
+        });
+        this.app.append(list);
+    }
 
 }
-
-console.log(Auto);
-
-let audi = new Auto ('AUDI', 'А4', 'А256ИП');
-console.log(audi);
-console.log(`Марка автомобиля ${audi.brand}.`);
-console.log(`Модель автомобиля ${audi.model}.`);
-console.log(`Номер автомобиля ${audi.number}.`);
-audi.engineOnOff();
-audi.transmission();
-audi.sped();
-audi.distance();
-audi.braking();
-
-
-
-// Прототипный метод
-
-let Bmw = function (brand, model, number) {
-    Auto.call(this, brand, model, number);
-    this.color = 'черный';
-};
-  
-Bmw.prototype = Object.create(Auto.prototype);
-Bmw.prototype.constructor = Bmw;
-
-Bmw.prototype.engineOnOff = function() {
-    let engineOnOffAnswer = prompt('Ваша машина заведена?');
-    this.engineOn = engineOnOffAnswer === 'да';
-    if (this.engineOn) {
-        console.log(`Двигатель автомобиля ${this.brand} ${this.model} номер ${this.number} цвет ${this.color} успешно запущен!`);
-    } else {
-        console.log(`Двигатель автомобиля ${this.brand} ${this.model} номер ${this.number} цвет ${this.color} выключен!`);
-    }
-};
-let bmw = new Bmw('BMW', 'XM', 'A235ИП')
-console.log(bmw);
-bmw.engineOnOff();
-
-
-
-//Функциональный метод
-
-function Car(brand, model, number) {
-    Auto.call(this, brand, model, number);
-    this.maxSpeed = 300;
-    this.speed = null;
-  }
-  
-  Car.prototype = Object.create(Auto.prototype);
-  Car.prototype.constructor = Car;
-  
-  Car.prototype.braking = function() {
-    this.g = 9.81;
-    this.ks = +prompt('Введите коэффициент сцепления автомобиля с дорогой: 0.7 (сухой асфальт), 0.4 (мокрый асфальт), 0.2 (гравий), 0.1 (снег, лед)!')
-    switch (this.ks) {
-      case 0.7:
-        this.result = (this.speed * 2) / (2 * this.g * this.ks);
-        console.log(`Тормозной путь автомобиля ${this.brand} ${this.model} ${this.result} м/сек.`);
-        break;
-      case 0.4:
-        this.result = (this.speed * 2) / (2 * this.g * this.ks);
-        console.log(`Тормозной путь автомобиля ${this.brand} ${this.model} ${this.result} м/сек.`);
-        break;
-      case 0.2:
-        this.result = (this.speed * 2) / (2 * this.g * this.ks);
-        console.log(`Тормозной путь автомобиля ${this.brand} ${this.model} ${this.result} м/сек.`);
-        break;
-      case 0.1:
-        this.result = (this.speed * 2) / (2 * this.g * this.ks);
-        console.log(`Тормозной путь автомобиля ${this.brand} ${this.model} ${this.result} м/сек.`);
-        break;
-      default:
-        this.result = 0;
-        console.log('Авария!');
-        break;
-    }
-    if (this.speed > this.maxSpeed) {
-      console.log(`Вы превысили максимально допустимую скорость ${this.maxSpeed} км/ч!`);
-    }
-};
-  
-let ferrari = new Car('Ferrari', '458', 'У777УУ');
-console.log(ferrari);
-console.log(`Марка автомобиля ${ferrari.brand}.`);
-console.log(`Модель автомобиля ${ferrari.model}.`);
-console.log(`Номер автомобиля ${ferrari.number}.`);
-ferrari.engineOnOff();
-ferrari.transmission();
-ferrari.sped();
-ferrari.distance();
-ferrari.braking();
+    
+const app = new ContactsApp(".contacts");

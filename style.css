@@ -3,15 +3,38 @@
     padding: 0;
 }
 
-#parentDiv {
-    width: 95%;
-    height: 100px;
-    margin: 0 auto;
-    margin-top: 20px;
+.contacts {
+    margin: 30px;
+}
+
+input,
+button {
+    height: 25px;
+    padding-left: 10px;
+    font-size: 14px;
+    text-align: left;
+    border-radius: 3px;
+    border: 3px solid #de06ee;
+    box-shadow: 10px 0 10px rgba(19, 64, 244, 0.5);
+}
+
+button {
+    padding: 0;
+    width: 80px;
+    height: 30px;
     text-align: center;
-    background-color: azure;
-    color: blueviolet;
-    font-size: 42px;
-    border: 2px solid rgb(8, 202, 220);
-    border-radius: 10px;
+    color: rgb(13, 13, 13);
+    cursor: pointer;
+}
+
+li {
+    margin: 30px;
+    list-style: none;
+}
+
+span {
+    margin: 30px;
+    margin-right: 10px;
+    font-size: 24px;
+    color: blue;
 }
