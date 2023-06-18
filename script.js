@@ -135,22 +135,27 @@ class ContactsApp extends Contacts {
         const list = document.createElement("ul");
         this.app.querySelector("ul")?.remove();
         this.data.forEach((user) => {
-            const item = document.createElement("li");
-            const name = document.createElement("span");
-            name.textContent = user.get().name;
-            const editButton = document.createElement("button");
-            editButton.textContent = "Edit";
-            editButton.dataset.id = user.get().id;
-            editButton.addEventListener("click", this.onEdit.bind(this));
-            const removeButton = document.createElement("button");
-            removeButton.textContent = "Remove";
-            removeButton.dataset.id = user.get().id;
-            removeButton.addEventListener("click", this.onRemove.bind(this));
-            item.append(name, editButton, removeButton);
-            list.append(item);
+          const item = document.createElement("li");
+          for (const [prop, value] of Object.entries(user.get())) {
+            if (prop !== 'id') {
+              const span = document.createElement("span");
+              span.textContent = `${prop}: ${value}`;
+              item.append(span);
+            }
+          }
+          const editButton = document.createElement("button");
+          editButton.textContent = "Edit";
+          editButton.dataset.id = user.get().id;
+          editButton.addEventListener("click", this.onEdit.bind(this));
+          const removeButton = document.createElement("button");
+          removeButton.textContent = "Remove";
+          removeButton.dataset.id = user.get().id;
+          removeButton.addEventListener("click", this.onRemove.bind(this));
+          item.append(editButton, removeButton);
+          list.append(item);
         });
         this.app.append(list);
-    }
+      }
 
 }
     
