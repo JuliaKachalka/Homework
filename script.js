@@ -77,8 +77,10 @@ class ContactsApp extends Contacts {
     }
 
     onEdit(event) {
+        console.log(this.data);
         const id = event.target.dataset.id;
         const user = this.data.find((user) => user.data.id === +id);
+        console.log(user);
         if (user) {
             const form = this.app.querySelector("form");
             const nameInput = form.elements[0];
@@ -93,22 +95,34 @@ class ContactsApp extends Contacts {
             saveButton.textContent = "Save";
             saveButton.dataset.id = id;
             saveButton.addEventListener("click", this.onSave.bind(this));
-            form.append(saveButton);
+            const editButton = event.target;
+            editButton.removeEventListener("click", this.onEdit.bind(this));
+            editButton.replaceWith(saveButton);
         }
     }
 
     onSave(event) {
         event.preventDefault();
-        const id = event.target.dataset.id;
-        const form = event.target.form;
-        const name = form.elements[0].value;
-        const email = form.elements[1].value;
-        const address = form.elements[2].value;
-        const phone = form.elements[3].value;
-        const data = { name, email, address, phone };
+        const saveButton = event.target;
+        const id = saveButton.dataset.id;
+        const form = saveButton.closest("form");
+        const name = form && form.elements[0] ? form.elements[0].value : '';
+        const email = form && form.elements[1] ? form.elements[1].value : '';
+        const address = form && form.elements[2] ? form.elements[2].value : '';
+        const phone = form && form.elements[3] ? form.elements[3].value : '';
+        const data = { id, name, email, address, phone };
+        const user = this.data.find((user) => user.data.id === +id);
+        if (user) {
+            user.edit(data);
+        }
         this.edit(id, data);
         this.get();
-        form.reset();
+        const editButton = document.createElement("button");
+        editButton.textContent = "Edit";
+        editButton.dataset.id = id;
+        editButton.addEventListener("click", this.onEdit.bind(this));
+        saveButton.removeEventListener("click", this.onSave.bind(this));
+        saveButton.replaceWith(editButton);
     }
 
     onRemove(event) {
@@ -116,6 +130,7 @@ class ContactsApp extends Contacts {
         this.remove(id);
         this.get();
     }
+
     get() {
         const list = document.createElement("ul");
         this.app.querySelector("ul")?.remove();
