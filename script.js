@@ -20,12 +20,15 @@ class Contacts {
     add(data) {
         const user = new User(data);
         this.data.push(user);
+        this.storage = this.data.map((user) => user.get());
     }
 
     edit(id, obj) {
-        const user = this.data.find((user) => user.data.id === +id);
-        if (user) {
-            user.edit(obj);
+        const userIndex = this.data.findIndex((user) => user.data.id === +id);
+        if (userIndex !== -1) {
+            const user = this.data[userIndex];
+            user.data = { ...user.data, ...obj };
+            this.storage = this.data.map((user) => user.get());
         }
     }
 
@@ -42,7 +45,32 @@ class ContactsApp extends Contacts {
     constructor(containerSelector) {
         super();
         this.app = document.querySelector(containerSelector);
+        this._storageExpirationKey = 'storageExpiration';
         this.render();
+    }
+
+    get storage() {
+        const storageExpiration = localStorage.getItem(this._storageExpirationKey);
+        if (storageExpiration && Date.now() < Number(storageExpiration)) {
+            const contactsJson = localStorage.getItem('contacts');
+            return JSON.parse(contactsJson);
+        } else {
+            this.clearStorage();
+            return [];
+        }
+    }
+
+    set storage(data) {
+        localStorage.setItem('contacts', JSON.stringify(data));
+        const expirationDate = new Date(Date.now() + 10 * 24 * 60 * 60 * 1000); // срок действия - 10 дней
+        document.cookie = `${this._storageExpirationKey}=${expirationDate.toUTCString()}`;
+        localStorage.setItem(this._storageExpirationKey, expirationDate.getTime());
+    }
+
+    clearStorage() {
+        localStorage.removeItem('contacts');
+        localStorage.removeItem(this._storageExpirationKey);
+        document.cookie = `${this._storageExpirationKey}=; expires=Thu, 01 Jan 1970 00:00:00 UTC`;
     }
 
     render() {
@@ -114,9 +142,14 @@ class ContactsApp extends Contacts {
         const user = this.data.find((user) => user.data.id === +id);
         if (user) {
             user.edit(data);
+            const item = saveButton.closest('li');
+            const spans = item.querySelectorAll('span');
+            for (const span of spans) {
+                const [prop, _] = span.textContent.split(': ');
+                span.textContent = `${prop}: ${data[prop]}`;
+            }
         }
-        this.edit(id, data);
-        this.get();
+        this.storage = this.data.map((user) => user.get());
         const editButton = document.createElement("button");
         editButton.textContent = "Edit";
         editButton.dataset.id = id;
@@ -135,27 +168,28 @@ class ContactsApp extends Contacts {
         const list = document.createElement("ul");
         this.app.querySelector("ul")?.remove();
         this.data.forEach((user) => {
-          const item = document.createElement("li");
-          for (const [prop, value] of Object.entries(user.get())) {
-            if (prop !== 'id') {
-              const span = document.createElement("span");
-              span.textContent = `${prop}: ${value}`;
-              item.append(span);
-            }
-          }
-          const editButton = document.createElement("button");
-          editButton.textContent = "Edit";
-          editButton.dataset.id = user.get().id;
-          editButton.addEventListener("click", this.onEdit.bind(this));
-          const removeButton = document.createElement("button");
-          removeButton.textContent = "Remove";
-          removeButton.dataset.id = user.get().id;
-          removeButton.addEventListener("click", this.onRemove.bind(this));
-          item.append(editButton, removeButton);
-          list.append(item);
+            const item = document.createElement("li");
+            for (const [prop, value] of Object.entries(user.get())) {
+                if (prop !== 'id') {
+                  const span = document.createElement("span");
+                  span.textContent = `${prop}: ${value}`;
+                  item.append(span);
+                }
+            } 
+            const editButton = document.createElement("button");
+            editButton.textContent = "Edit";
+            editButton.dataset.id = user.get().id;
+            editButton.addEventListener("click", this.onEdit.bind(this));
+            const removeButton = document.createElement("button");
+            removeButton.textContent = "Remove";
+            removeButton.dataset.id = user.get().id;
+            removeButton.addEventListener("click", this.onRemove.bind(this));
+            item.append(editButton, removeButton);
+            list.append(item);
         });
+
         this.app.append(list);
-      }
+    }
 
 }
     
